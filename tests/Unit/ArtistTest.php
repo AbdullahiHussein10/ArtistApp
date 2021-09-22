@@ -1,31 +1,11 @@
 <?php
 
-namespace Tests\Unit;
-use Faker\Factory;
-use PHPUnit\Framework\TestCase;
+use App\Models\Artist;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ArtistTest extends TestCase
-{
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function test_example()
-    {
-        $this->assertTrue(true);
-    }
+uses(Tests\TestCase::class, RefreshDatabase::class);
 
-    public function test_can_create_post() 
-    {
-        $data = [
-            'band_name' => "The Animals",
-            'genre' => "Classical Music",
-            'location' => "United States"
-        ];
-
-        $response = $this->post(route('artist.store'), $data)
-            ->assertStatus(201)
-            ->assertJson($data);
-    }
-}
+it('does not create a to-do without a band_name, genre, location field', function () {
+    $response = $this->postJson('/api/artist', []);
+    $response->assertStatus(422);
+});

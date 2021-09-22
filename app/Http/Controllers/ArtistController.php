@@ -14,7 +14,7 @@ class ArtistController extends Controller
      */
     public function index()
     {
-        $artists = Artist::orderBy('likes')->get();
+        $artists = Artist::orderBy('likes', 'desc')->get();
         return response()->json([
             'artists' => $artists
         ]);
@@ -39,7 +39,7 @@ class ArtistController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'band_name' => 'required',
+            'band_name' => 'required|unique:artists',
             'genre' => 'required',
             'location' => 'required',
         ]);
@@ -52,7 +52,7 @@ class ArtistController extends Controller
 
         return response()->json([
             'message' => 'Artist Created Successfully',
-            'code' => 201
+            'code' => 201,
         ]);
     }
 
@@ -67,6 +67,7 @@ class ArtistController extends Controller
         $artist = Artist::findOrFail($id);
         return response()->json([
             'message' => 'Artist retrieved successfully',
+            'status' => 200,
             'artist' => $artist
         ]);
     }
@@ -114,8 +115,8 @@ class ArtistController extends Controller
     public function like($id)
     {
         $artist = Artist::findOrFail($id);
-        $value = $artist->like;
-        $artist->like = $value+1;
+        $value = $artist->likes;
+        $artist->likes = $value+1;
         $artist->save();
 
         return response()->json([
@@ -128,8 +129,8 @@ class ArtistController extends Controller
     public function dislike($id)
     {
         $artist = Artist::findorFail($id);
-        $value = $artist->dislike;
-        $artist->dislike = $value + 1;
+        $value = $artist->dislikes;
+        $artist->dislikes = $value + 1;
         $artist->save();
 
         return response()->json([

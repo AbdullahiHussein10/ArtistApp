@@ -20,5 +20,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('artist', [ArtistController::class, 'store'])->name('artist.store');
+Route::get('artists', [ArtistController::class, 'index']);
+Route::post('artist', [ArtistController::class, 'store']);
+Route::get('artist/{id}', [ArtistController::class, 'show']);
+Route::delete('artist/{id}', [ArtistController::class, 'destroy']);
+Route::post('/artist/{id}/like', [ArtistController::class, 'like']);
+Route::post('/artist/{id}/dislike', [ArtistController::class, 'dislike']);
 
